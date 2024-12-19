@@ -103,14 +103,14 @@ def login():
     if request.method == 'POST':
         login = request.form['login']
         password = request.form['password']
-        conn, cur = db_connect()
+        conn, cur = None, None  # Инициализация переменных
         try:
+            conn, cur = db_connect()
             if current_app.config['DB_TYPE'] == 'postgres':
                 cur.execute("SELECT * FROM users WHERE login=%s;", (login,))
             else:
                 cur.execute("SELECT * FROM users WHERE login=?;", (login,))
             user = cur.fetchone()
-            db_close(conn, cur)
 
             if user and check_password_hash(user['password'], password):
                 session['user_id'] = user['id']
@@ -119,9 +119,13 @@ def login():
             else:
                 return render_template('login.html', error='Invalid credentials')
         except Exception as e:
-            db_close(conn, cur)
+            print(f"Error during login: {e}")
             return render_template('login.html', error=f"Error: {str(e)}")
+        finally:
+            if conn and cur:
+                db_close(conn, cur)  # Гарантируем, что соединение закрывается корректно
     return render_template('login.html')
+
 
 
 
