@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Base</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header style="background-color: #333; padding: 15px 0;">
+        <nav>
+            <ul style="list-style: none; display: flex; justify-content: center; padding: 0; margin: 0;">
+                <li style="margin: 0 15px;"><a href="{{ url_for('main') }}" style="color: #ffffff; text-decoration: none;">Главная</a></li>
+                {% if session.get('is_admin') %}
+                    <li style="margin: 0 15px;"><a href="{{ url_for('users') }}" style="color: #ffffff; text-decoration: none;">Пользователи</a></li>
+                {% endif %}
+                {% if 'user_id' in session %}
+                    <li style="margin: 0 15px;"><a href="{{ url_for('profile') }}" style="color: #ffffff; text-decoration: none;">Профиль</a></li>
+                    <li style="margin: 0 15px;"><a href="{{ url_for('logout') }}" style="color: #ffffff; text-decoration: none;">Выход</a></li>
+                {% else %}
+                    <li style="margin: 0 15px;"><a href="{{ url_for('login') }}" style="color: #ffffff; text-decoration: none;">Войти</a></li>
+                    <li style="margin: 0 15px;"><a href="{{ url_for('register') }}" style="color: #ffffff; text-decoration: none;">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy;Бархатова Ольга, ФБИ-24. 2024</p>
+    </footer>
+</body>
+</html>

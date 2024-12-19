@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Объявления RU</h1>
+    </header>
+
+    <div class="container">
+        <nav>
+            <a href="{{ url_for('main') }}">Главная</a>
+            {% if 'user_id' not in session %}
+            <a href="{{ url_for('register') }}">Регистрация</a>
+            <a href="{{ url_for('login') }}">Вход</a>
+            {% endif %}
+            {% if 'user_id' in session %}
+                <a href="{{ url_for('profile') }}">Профиль</a>
+                <a href="{{ url_for('logout') }}">Выход</a>
+            {% endif %}
+            {% if session.get('is_admin') %}
+                <a href="{{ url_for('users') }}">Пользователи</a>
+            {% endif %}
+        </nav>
+
+        <h2>Объявления</h2>
+
+    {% for ad in ads %}
+        <div class="ads-card">
+            <h3>{{ ad.title }}</h3>
+            <p>{{ ad.content }}</p>
+            <p class="author">Автор: {{ ad.author }}{% if ad.email %} ({{ ad.email }}){% endif %}</p>
+            
+            {% if session.get('is_admin') %}
+            <form action="{{ url_for('delete_ad', ad_id=ad.id) }}" method="POST" class="inline-form">
+                <button type="submit" class="btn btn-delete">Удалить</button>
+            </form>
+            {% endif %}
+        </div>
+    {% endfor %}
+    </div>
+    <footer>
+        <p>&copy;Бархатова Ольга, ФБИ-24. 2024</p>
+    </footer>
+</body>
+</html>

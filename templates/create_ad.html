@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать объявление</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/styles.css') }}"></head>
+<body>
+    <h1>Создать объявление</h1>
+    <form method="POST">
+        <label for="title">Заголовок:</label>
+        <input type="text" name="title" required><br><br>
+
+        <label for="content">Контент:</label>
+        <textarea name="content" required></textarea><br><br>
+
+        <button type="submit">Создать</button>
+    </form>
+    <br>
+    <a href="{{ url_for('main') }}">На главную</a>
+    <footer>
+        <p>&copy;Бархатова Ольга, ФБИ-24. 2024</p>
+    </footer>
+</body>
+</html>

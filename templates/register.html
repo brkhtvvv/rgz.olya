@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/styles.css') }}">
+</head>
+<body>
+    <h1>Регистрация</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="text" name="login" placeholder="Логин" required>
+            <input type="password" name="password" placeholder="Пароль" required>
+            <input type="text" name="fullname" placeholder="Полное имя" required>
+            <input type="email" name="email" placeholder="Электронная почта" required>
+            <textarea name="about" placeholder="О себе"></textarea>
+            <input type="file" name="avatar" accept="image/*">
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+    </form>
+    <footer>
+        <p>&copy;Бархатова Ольга, ФБИ-24. 2024</p>
+    </footer>
+</body>
+</html>

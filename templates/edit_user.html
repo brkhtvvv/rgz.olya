@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Редактировать пользователя</h1>
+<form method="POST" enctype="multipart/form-data">
+    <label for="fullname">Полное имя:</label>
+    <input type="text" name="fullname" value="{{ user.fullname }}" required><br>
+
+    <label for="email">Электронная почта:</label>
+    <input type="email" name="email" value="{{ user.email }}" required><br>
+
+    <label for="about">О пользователе:</label>
+    <textarea name="about">{{ user.about }}</textarea><br>
+
+    <label for="avatar">Изображение:</label>
+    <input type="file" name="avatar"><br>
+
+    <button type="submit">Сохранить изменения</button>
+</form>
+{% endblock %}

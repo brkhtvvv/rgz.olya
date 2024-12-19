@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доска объявлений</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/styles.css') }}"></head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Доска объявлений</h1>
+
+        {% if ads %}
+            <div class="list-group">
+                {% for ad in ads %}
+                    <div class="list-group-item">
+                        <h5 class="mb-1">{{ ad.title }}</h5>
+                        <p class="mb-1">{{ ad.content }}</p>
+                        <small>Автор: {{ ad.author }}</small><br>
+                        <small>Email автора: {{ ad.email }}</small>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Нет объявлений.</p>
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="{{ url_for('create_ad') }}" class="btn btn-primary">Создать объявление</a>
+        </div>
+    </div>
+    <footer>
+        <p>&copy;Бархатова Ольга, ФБИ-24. 2024</p>
+    </footer>
+</body>
+</html>
