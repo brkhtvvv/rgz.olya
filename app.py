@@ -45,7 +45,7 @@ def main():
     try:
         conn, cur = db_connect()
         if 'user_id' in session:
-            ("""
+            cur.execute("""
                 SELECT ads.id, ads.title, ads.content, users.fullname AS author, users.email
                 FROM ads
                 JOIN users ON ads.user_id = users.id;
@@ -309,9 +309,14 @@ def profile():
         cur.execute("SELECT * FROM users WHERE id=?;", (session['user_id'],))
     user = cur.fetchone()
 
-    cur.execute("""
-        SELECT * FROM ads WHERE user_id=%s;
-    """, (session['user_id'],))
+    if current_app.config['DB_TYPE'] == 'postgres':    
+        cur.execute("""
+            SELECT * FROM ads WHERE user_id=%s;
+        """, (session['user_id'],))
+    else:
+        cur.execute("""
+            SELECT * FROM ads WHERE user_id=?;
+        """, (session['user_id'],))
     ads = cur.fetchall()
 
     db_close(conn, cur)
