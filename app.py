@@ -112,9 +112,9 @@ def login():
                 cur.execute("SELECT * FROM users WHERE login=?;", (login,))
             user = cur.fetchone()
 
-            if user and check_password_hash(user['password'], password):
+            if user and check_password_hash(user['password'], password):  # Используем user['password']
                 session['user_id'] = user['id']
-                session['is_admin'] = user.get('is_admin', False)
+                session['is_admin'] = user.get('is_admin', False)  # Здесь можно оставить .get
                 return redirect(url_for('main'))
             else:
                 return render_template('login.html', error='Invalid credentials')
@@ -204,7 +204,7 @@ def edit_ad(ad_id):
         cur.execute("SELECT * FROM ads WHERE id=?;", (ad_id,))
     ad = cur.fetchone()
 
-    if ad is None or ad['user_id'] != session['user_id']:
+    if ad is None or ad['user_id'] != session['user_id']:  # Используем ad['user_id']
         return redirect(url_for('main'))  
 
     if request.method == 'POST':
@@ -233,6 +233,9 @@ def delete_ad(ad_id):
     else:
         cur.execute("SELECT * FROM ads WHERE id=?;", (ad_id,))
     ad = cur.fetchone()
+
+    if ad is None or ad['user_id'] != session['user_id']:  # Используем ad['user_id']
+        return redirect(url_for('main'))
 
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("DELETE FROM ads WHERE id=%s;", (ad_id,))
