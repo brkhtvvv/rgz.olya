@@ -46,8 +46,11 @@ def main():
     try:
         conn, cur = db_connect()
         if 'user_id' in session:
-            cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-            print(cur.fetchall())
+            cur.execute("""
+                SELECT ads.id, ads.title, ads.content, users.fullname AS author, users.email
+                FROM ads
+                JOIN users ON ads.user_id = users.id;
+            """)
         else:
             cur.execute("""
                 SELECT ads.id, ads.title, ads.content, users.fullname AS author
