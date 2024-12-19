@@ -40,7 +40,6 @@ def db_close(conn, cur):
     cur.close()
     conn.close()
 
-
 @app.route('/')
 def main():
     try:
@@ -62,7 +61,6 @@ def main():
         return render_template('index.html', ads=ads)
     except Exception as e:
         return f"An error occurred: {str(e)}"
-
 
 
 
@@ -216,7 +214,7 @@ def edit_ad(ad_id):
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        
+
         if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute("UPDATE ads SET title=%s, content=%s WHERE id=%s;", (title, content, ad_id))
         else:
@@ -254,7 +252,7 @@ def delete_ad(ad_id):
 def create_ad_rpc(title: str, content: str):
     if 'user_id' not in session:
         return {'error': 'Unauthorized'}
-    
+
     user_id = session['user_id']
     conn, cur = db_connect()
 
@@ -269,7 +267,7 @@ def create_ad_rpc(title: str, content: str):
 def edit_ad_rpc(ad_id: int, title: str, content: str):
     if 'user_id' not in session:
         return {'error': 'Unauthorized'}
-    
+
     conn, cur = db_connect()
 
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -292,7 +290,7 @@ def edit_ad_rpc(ad_id: int, title: str, content: str):
 def delete_ad_rpc(ad_id: int):
     if 'user_id' not in session:
         return {'error': 'Unauthorized'}
-    
+
     conn, cur = db_connect()
 
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -315,7 +313,7 @@ def profile():
         return redirect(url_for('login'))
 
     conn, cur = db_connect()
-    
+
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT * FROM users WHERE id=%s;", (session['user_id'],))
     else:
@@ -397,7 +395,7 @@ def users():
         return render_template('users.html', users=users)
     except Exception as e:
         return f"An error occurred: {str(e)}"
-    
+
 
 @app.route('/delete_user/<int:user_id>', methods=['POST'])
 def delete_user(user_id):
@@ -471,7 +469,7 @@ def delete_ad_admin(ad_id):
 
         # Проверяем, администратор ли пользователь
         is_admin = session.get('is_admin', False)
-        
+
         if is_admin:
             # Администратор может удалить любое объявление
             if current_app.config['DB_TYPE'] == 'postgres':
