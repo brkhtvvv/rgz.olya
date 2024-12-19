@@ -40,6 +40,7 @@ def db_close(conn, cur):
     cur.close()
     conn.close()
 
+
 @app.route('/')
 def main():
     try:
@@ -61,6 +62,7 @@ def main():
         return render_template('index.html', ads=ads)
     except Exception as e:
         return f"An error occurred: {str(e)}"
+
 
 
 
