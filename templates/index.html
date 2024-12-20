@@ -14,8 +14,8 @@
         <nav>
             <a href="{{ url_for('main') }}">Главная</a>
             {% if 'user_id' not in session %}
-            <a href="{{ url_for('register') }}">Регистрация</a>
-            <a href="{{ url_for('login') }}">Вход</a>
+                <a href="{{ url_for('register') }}">Регистрация</a>
+                <a href="{{ url_for('login') }}">Вход</a>
             {% endif %}
             {% if 'user_id' in session %}
                 <a href="{{ url_for('profile') }}">Профиль</a>
@@ -25,17 +25,33 @@
                 <a href="{{ url_for('users') }}">Пользователи</a>
             {% endif %}
         </nav>
+
         <h2>Объявления</h2>
+
         {% if ads %}
-            {% for ad in ads %}
-                <div>
-                    <h2>{{ ad.title }}</h2>
-                    <p>{{ ad.content }}</p>
-                    <p>Автор: {{ ad.author }}</p>
-                </div>
-            {% endfor %}
+            <div class="list-group">
+                {% for ad in ads %}
+                    <div class="list-group-item">
+                        <h5 class="mb-1">{{ ad[1] }}</h5>  <!-- Заголовок -->
+                        <p class="mb-1">{{ ad[2] }}</p>    <!-- Контент -->
+                        <small>Автор: {{ ad[3] }}</small><br>  <!-- Автор -->
+                        <small>Email автора: {{ ad[4] }}</small>  <!-- Email -->
+                        
+                        {% if session.get('is_admin') %}
+                            <form action="{{ url_for('delete_ad', ad_id=ad.id) }}" method="POST" class="inline-form">
+                                <button type="submit" class="btn btn-delete">Удалить</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
         {% else %}
-            <p>Нет объявлений</p>
+            <p>Нет объявлений.</p>
         {% endif %}
+
+    </div>
+    <footer>
+        <p>&copy;Бархатова Ольга, ФБИ-24. 2024</p>
+    </footer>
 </body>
 </html>
