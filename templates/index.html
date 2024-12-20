@@ -41,7 +41,8 @@
             transition: background-color 0.3s ease;
         }
         nav a:hover {
-            background-color: #000000;
+            background-color: #121315;
+            color: white;
         }
         .container {
             padding: 20px;
@@ -140,7 +141,7 @@
                                 <h5 class="card-title">{{ ad[1] }}</h5>  <!-- Заголовок -->
                                 <p class="card-text">{{ ad[2] }}</p>    <!-- Контент -->
                                 <p class="card-author">Автор: {{ ad[3] }}</p>  <!-- Автор -->
-                                <p class="card-email">{{ ad[4] }}</p>  <!-- Email -->
+                                <p class="card-email"> {{ ad[4] }}</p>  <!-- Email -->
                                 
                                 {% if session.get('is_admin') %}
                                     <form action="{{ url_for('delete_ad', ad_id=ad.id) }}" method="POST" class="inline-form">
