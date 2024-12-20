@@ -26,6 +26,7 @@
             {% endif %}
         </nav>
         <h2>Объявления</h2>
+        <div class="ads-card">
         {% if ads %}
             {% for ad in ads %}
             <h3>{{ ad.title }}</h3>
@@ -37,6 +38,7 @@
                 <button type="submit" class="btn btn-delete">Удалить</button>
             </form>
             {% endif %}
+        </div>
             {% endfor %}
         {% else %}
             <p>Нет объявлений</p>
