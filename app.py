@@ -347,7 +347,7 @@ def profile():
     print(f"User: {user}")
     print(f"Ads: {ads}")
 
-    if user:
+    if user and ads:
         return render_template('profile.html', user=user, ads=ads)
     else:
         print("User not found in database")
