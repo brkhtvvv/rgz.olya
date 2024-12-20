@@ -44,6 +44,7 @@ def db_close(conn, cur):
 def main():
     try:
         conn, cur = db_connect()
+        
         if 'user_id' in session:
             cur.execute("""
                 SELECT ads.id, ads.title, ads.content, users.fullname AS author, users.email
@@ -56,11 +57,19 @@ def main():
                 FROM ads
                 JOIN users ON ads.user_id = users.id;
             """)
+        
         ads = cur.fetchall()
         db_close(conn, cur)
+        
+        # Проверка на пустой список
+        if not ads:
+            return render_template('index.html', ads=[])
+        
         return render_template('index.html', ads=ads)
+    
     except Exception as e:
         return f"An error occurred: {str(e)}"
+
 
 
 
