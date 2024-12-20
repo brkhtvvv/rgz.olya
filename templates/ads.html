@@ -13,10 +13,10 @@
             <div class="list-group">
                 {% for ad in ads %}
                     <div class="list-group-item">
-                        <h5 class="mb-1">{{ ad.title }}</h5>
-                        <p class="mb-1">{{ ad.content }}</p>
-                        <small>Автор: {{ ad.author }}</small><br>
-                        <small>Email автора: {{ ad.email }}</small>
+                        <h5 class="mb-1">{{ ad[1] }}</h5>  <!-- Заголовок -->
+                        <p class="mb-1">{{ ad[2] }}</p>    <!-- Контент -->
+                        <small>Автор: {{ ad[3] }}</small><br>  <!-- Автор -->
+                        <small>Email автора: {{ ad[4] }}</small>  <!-- Email -->
                     </div>
                 {% endfor %}
             </div>
