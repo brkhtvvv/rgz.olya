@@ -144,7 +144,7 @@
                                 <p class="card-email"> {{ ad[4] }}</p>  <!-- Email -->
                                 
                                 {% if session.get('is_admin') %}
-                                    <form action="{{ url_for('delete_ad', ad_id=ad.id) }}" method="POST" class="inline-form">
+                                    <form action="{{ url_for('delete_ad_admin', ad_id=ad.id) }}" method="POST" class="inline-form">
                                         <button type="submit" class="btn">Удалить</button>
                                     </form>
                                 {% endif %}
