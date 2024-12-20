@@ -191,9 +191,14 @@ def create_ad():
         else:
             cur.execute("INSERT INTO ads (title, content, user_id) VALUES (?, ?, ?);", (title, content, user_id))
         db_close(conn, cur)
+
+        # Добавим вывод для отладки
+        print(f"Ad created: Title - {title}, Content - {content}, User ID - {user_id}")
+
         return redirect(url_for('profile'))
 
     return render_template('create_ad.html')
+
 
 
 
@@ -265,6 +270,7 @@ def create_ad_rpc(title: str, content: str):
     else:
         cur.execute("INSERT INTO ads (title, content, user_id) VALUES (?, ?, ?);", (title, content, user_id))
     db_close(conn, cur)
+
     return {'success': 'Ad created'}
 
 
@@ -337,11 +343,16 @@ def profile():
 
     db_close(conn, cur)
 
+    # Добавим вывод для отладки
+    print(f"User: {user}")
+    print(f"Ads: {ads}")
+
     if user:
         return render_template('profile.html', user=user, ads=ads)
     else:
         print("User not found in database")
         return redirect(url_for('login'))
+
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
