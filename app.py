@@ -112,7 +112,7 @@ def login():
                 cur.execute("SELECT * FROM users WHERE login=?;", (login,))
             user = cur.fetchone()
 
-            if user and check_password_hash(user['password'], password):  # Используем user['password']
+            if user and check_password_hash(dict(user)['password'], password):  # Используем user['password']
                 session['user_id'] = user['id']
                 session['is_admin'] = user['is_admin'] if 'is_admin' in user.keys() else False
                 return redirect(url_for('main'))
