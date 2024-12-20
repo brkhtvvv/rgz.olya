@@ -37,11 +37,9 @@ nav a {
 }
 
 nav a:hover {
-    color: #007bff;
-}
-button{
     color: #333;
 }
+
 
 /* Стили для карточек объявлений */
 .ads-card {
