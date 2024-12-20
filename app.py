@@ -173,6 +173,7 @@ def ads():
         return "Internal Server Error", 500
 
 
+
 @app.route('/create_ad', methods=['GET', 'POST'])
 def create_ad():
     if 'user_id' not in session:
@@ -195,6 +196,7 @@ def create_ad():
     return render_template('create_ad.html')
 
 
+
 @app.route('/edit_ad/<int:ad_id>', methods=['GET', 'POST'])
 def edit_ad(ad_id):
     if 'user_id' not in session:
@@ -206,9 +208,9 @@ def edit_ad(ad_id):
         cur.execute("SELECT * FROM ads WHERE id=%s;", (ad_id,))
     else:
         cur.execute("SELECT * FROM ads WHERE id=?;", (ad_id,))
-    ad = dict(cur.fetchone())
+    ad = dict(cur.fetchone())  # Преобразуем результат в словарь
 
-    if ad is None or dict(ad)['user_id'] != session['user_id']:  # Используем ad['user_id']
+    if ad is None or ad['user_id'] != session['user_id']:  # Проверка, что пользователь является владельцем объявления
         return redirect(url_for('main'))  
 
     if request.method == 'POST':
@@ -225,6 +227,7 @@ def edit_ad(ad_id):
     db_close(conn, cur)
     return render_template('edit_ad.html', ad=ad)
 
+
 @app.route('/delete_ad/<int:ad_id>', methods=['POST'])
 def delete_ad(ad_id):
     if 'user_id' not in session:
@@ -236,9 +239,9 @@ def delete_ad(ad_id):
         cur.execute("SELECT * FROM ads WHERE id=%s;", (ad_id,))
     else:
         cur.execute("SELECT * FROM ads WHERE id=?;", (ad_id,))
-    ad = dict(cur.fetchone())
+    ad = dict(cur.fetchone())  # Преобразуем результат в словарь
 
-    if ad is None or dict(ad)['user_id'] != session['user_id']:  # Используем ad['user_id']
+    if ad is None or ad['user_id'] != session['user_id']:  # Проверка, что пользователь является владельцем объявления
         return redirect(url_for('main'))
 
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -247,6 +250,7 @@ def delete_ad(ad_id):
         cur.execute("DELETE FROM ads WHERE id=?;", (ad_id,))
     db_close(conn, cur)
     return redirect(url_for('profile'))
+
 
 @jsonrpc.method('ad.create')
 def create_ad_rpc(title: str, content: str):
@@ -262,6 +266,7 @@ def create_ad_rpc(title: str, content: str):
         cur.execute("INSERT INTO ads (title, content, user_id) VALUES (?, ?, ?);", (title, content, user_id))
     db_close(conn, cur)
     return {'success': 'Ad created'}
+
 
 @jsonrpc.method('ad.edit')
 def edit_ad_rpc(ad_id: int, title: str, content: str):
