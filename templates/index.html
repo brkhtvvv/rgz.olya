@@ -26,8 +26,8 @@
             {% endif %}
         </nav>
         <h2>Объявления</h2>
-        <div class="ads-card">
         {% if ads %}
+        <div class="ads-card"></div>
             {% for ad in ads %}
             <h3>{{ ad.title }}</h3>
             <p>{{ ad.content }}</p>
