@@ -10,6 +10,7 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            color: #333;
         }
 
         .container {
@@ -21,13 +22,14 @@
         header {
             background-color: #333;
             color: white;
-            padding: 10px 0;
+            padding: 15px 0;
             text-align: center;
+            border-bottom: 4px solid #007bff;
         }
 
         header h1 {
             margin: 0;
-            font-size: 2em;
+            font-size: 2.5em;
         }
 
         nav {
@@ -40,6 +42,7 @@
             margin: 0 10px;
             text-decoration: none;
             font-weight: bold;
+            transition: color 0.3s;
         }
 
         nav a:hover {
@@ -62,10 +65,12 @@
             width: 150px;
             height: 150px;
             object-fit: cover;
+            border: 3px solid #007bff;
         }
 
         .profile-card .profile-info {
             color: #666;
+            flex: 1;
         }
 
         .profile-card h2 {
@@ -84,56 +89,72 @@
             text-decoration: none;
             margin-top: 10px;
             display: inline-block;
+            transition: color 0.3s;
         }
 
         .profile-card a:hover {
             color: #0056b3;
         }
 
-        .ads-card {
+        .ad-card {
             background-color: white;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 15px;
+            margin: 15px 0;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .ads-card h3 {
-            font-size: 1.5em;
-            color: #333;
-        }
-
-        .ads-card p {
-            color: #666;
-        }
-
-        .ads-card a {
+        .ad-card h3 {
+            margin: 0 0 10px;
             color: #007bff;
-            font-weight: bold;
-            text-decoration: none;
         }
 
-        .ads-card a:hover {
-            color: #0056b3;
+        .ad-card p {
+            margin: 10px 0;
+            color: #555;
         }
 
-        .ads-card form {
-            display: inline;
-        }
-
-        .ads-card button {
+        .ad-card a, .ad-card button {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 8px 12px;
             background-color: #007bff;
             color: white;
-            padding: 8px 15px;
+            text-decoration: none;
             border: none;
             border-radius: 4px;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 1em;
-            margin-top: 10px;
+            transition: background-color 0.3s;
         }
 
-        .ads-card button:hover {
+        .ad-card a:hover, .ad-card button:hover {
             background-color: #0056b3;
+        }
+
+        .btn-create {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-create:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+            font-size: 0.9em;
         }
 
         @media (max-width: 768px) {
@@ -142,11 +163,7 @@
             }
 
             header h1 {
-                font-size: 1.5em;
-            }
-
-            nav {
-                font-size: 0.9em;
+                font-size: 1.8em;
             }
 
             .profile-card {
@@ -160,24 +177,6 @@
                 height: 120px;
             }
         }
-
-
-
-.btn-create {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 4px;
-}
-
-.btn-create:hover {
-    background-color: #218838;
-}
-
     </style>
 </head>
 <body>
@@ -199,26 +198,24 @@
         </div>
 
         <h2>Мои объявления</h2>
-            {% for ad in ads %}
-                <div>
-                    <h3>{{ ad.title }}</h3>
-                    <p>{{ ad.content }}</p>
-                    <div>
-                        <a href="{{ url_for('edit_ad', ad_id=ad.id) }}">Изменить</a>
-                        <form action="{{ url_for('delete_ad', ad_id=ad.id) }}" method="POST" style="display:inline;">
-                            <button type="submit">Удалить</button>
-                        </form>
-                    </div>
-                </div>
-            {% else %}
-                <div>
-                    <p>Пока нет объявлений.</p>
-                </div>
-            {% endfor %}
+        {% for ad in ads %}
+            <div class="ad-card">
+                <h3>{{ ad.title }}</h3>
+                <p>{{ ad.content }}</p>
+                <a href="{{ url_for('edit_ad', ad_id=ad.id) }}">Изменить</a>
+                <form action="{{ url_for('delete_ad', ad_id=ad.id) }}" method="POST" style="display:inline;">
+                    <button type="submit">Удалить</button>
+                </form>
+            </div>
+        {% else %}
+            <div>
+                <p>Пока нет объявлений.</p>
+            </div>
+        {% endfor %}
         <a href="{{ url_for('create_ad') }}" class="btn-create">Создать новое объявление</a>
     </div>
     <footer>
-        <p>&copy;Бархатова Ольга, ФБИ-24. 2024</p>
+        <p>&copy; Бархатова Ольга, ФБИ-24. 2024</p>
     </footer>
 </body>
 </html>
