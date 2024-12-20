@@ -264,7 +264,6 @@
         </div>
 
         <h2>Мои объявления</h2>
-        <div class="ads-list">
             {% for ad in ads %}
                 <div>
                     <h3>{{ ad.title }}</h3>
@@ -281,7 +280,6 @@
                     <p>Пока нет объявлений.</p>
                 </div>
             {% endfor %}
-        </div>
         <a href="{{ url_for('create_ad') }}" class="btn-create">Создать новое объявление</a>
     </div>
     <footer>
