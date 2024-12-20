@@ -314,7 +314,7 @@ def profile():
         cur.execute("SELECT * FROM users WHERE id=%s;", (session['user_id'],))
     else:
         cur.execute("SELECT * FROM users WHERE id=?;", (session['user_id'],))
-    user = cur.fetchone()
+    user = dict(cur.fetchone())
 
     if current_app.config['DB_TYPE'] == 'postgres':    
         cur.execute("""
@@ -324,7 +324,7 @@ def profile():
         cur.execute("""
             SELECT * FROM ads WHERE user_id=?;
         """, (session['user_id'],))
-    ads = cur.fetchall()
+    ads = [dict(ad) for ad in cur.fetchall()]
 
     db_close(conn, cur)
 
