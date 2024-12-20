@@ -26,9 +26,8 @@
             {% endif %}
         </nav>
         <h2>Объявления</h2>
-        {% if ads %}
-        <div class="ads-card"></div>
-            {% for ad in ads %}
+    {% for ad in ads %}
+        <div class="ads-card">
             <h3>{{ ad.title }}</h3>
             <p>{{ ad.content }}</p>
             <p class="author">Автор: {{ ad.author }}{% if ad.email %} ({{ ad.email }}){% endif %}</p>
@@ -39,9 +38,10 @@
             </form>
             {% endif %}
         </div>
-            {% endfor %}
-        {% else %}
-            <p>Нет объявлений</p>
-        {% endif %}
+    {% endfor %}
+    </div>
+    <footer>
+        <p>&copy;Бархатова Ольга, ФБИ-24. 2024</p>
+    </footer>
 </body>
 </html>
