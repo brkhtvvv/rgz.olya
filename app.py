@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'секретно-сек
 app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
 
 jsonrpc = JSONRPC(app, '/api')
-UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'avatars')
+UPLOAD_FOLDER = 'static/avatars'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -79,10 +79,7 @@ def register():
         avatar = request.files['avatar']
 
         filename = secure_filename(avatar.filename)
-        avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        if os.path.isdir(avatar_path):
-            raise ValueError(f"Invalid file path: {avatar_path}")
-        avatar.save(avatar_path)
+        avatar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         conn, cur = db_connect()
 
@@ -115,9 +112,9 @@ def login():
                 cur.execute("SELECT * FROM users WHERE login=?;", (login,))
             user = cur.fetchone()
 
-            if user and check_password_hash(dict(user)['password'], password):  # Используем user['password']
+            if user and check_password_hash(user['password'], password):  # Используем user['password']
                 session['user_id'] = user['id']
-                session['is_admin'] = user['is_admin'] if 'is_admin' in user.keys() else False  # Здесь можно оставить .get
+                session['is_admin'] = user['is_admin'] if 'is_admin' in user.keys() else False
                 return redirect(url_for('main'))
             else:
                 return render_template('login.html', error='Invalid credentials')
@@ -205,15 +202,15 @@ def edit_ad(ad_id):
         cur.execute("SELECT * FROM ads WHERE id=%s;", (ad_id,))
     else:
         cur.execute("SELECT * FROM ads WHERE id=?;", (ad_id,))
-    ad = dict(cur.fetchone())
+    ad = cur.fetchone()
 
-    if ad is None or dict(ad)['user_id'] != session['user_id']:  # Используем ad['user_id']
+    if ad is None or ad['user_id'] != session['user_id']:  # Используем ad['user_id']
         return redirect(url_for('main'))  
 
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-
+        
         if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute("UPDATE ads SET title=%s, content=%s WHERE id=%s;", (title, content, ad_id))
         else:
@@ -235,9 +232,9 @@ def delete_ad(ad_id):
         cur.execute("SELECT * FROM ads WHERE id=%s;", (ad_id,))
     else:
         cur.execute("SELECT * FROM ads WHERE id=?;", (ad_id,))
-    ad = dict(cur.fetchone())
+    ad = cur.fetchone()
 
-    if ad is None or dict(ad)['user_id'] != session['user_id']:  # Используем ad['user_id']
+    if ad is None or ad['user_id'] != session['user_id']:  # Используем ad['user_id']
         return redirect(url_for('main'))
 
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -251,7 +248,7 @@ def delete_ad(ad_id):
 def create_ad_rpc(title: str, content: str):
     if 'user_id' not in session:
         return {'error': 'Unauthorized'}
-
+    
     user_id = session['user_id']
     conn, cur = db_connect()
 
@@ -266,7 +263,7 @@ def create_ad_rpc(title: str, content: str):
 def edit_ad_rpc(ad_id: int, title: str, content: str):
     if 'user_id' not in session:
         return {'error': 'Unauthorized'}
-
+    
     conn, cur = db_connect()
 
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -289,7 +286,7 @@ def edit_ad_rpc(ad_id: int, title: str, content: str):
 def delete_ad_rpc(ad_id: int):
     if 'user_id' not in session:
         return {'error': 'Unauthorized'}
-
+    
     conn, cur = db_connect()
 
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -312,12 +309,12 @@ def profile():
         return redirect(url_for('login'))
 
     conn, cur = db_connect()
-
+    
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT * FROM users WHERE id=%s;", (session['user_id'],))
     else:
         cur.execute("SELECT * FROM users WHERE id=?;", (session['user_id'],))
-    user = dict(cur.fetchone())
+    user = cur.fetchone()
 
     if current_app.config['DB_TYPE'] == 'postgres':    
         cur.execute("""
@@ -327,7 +324,7 @@ def profile():
         cur.execute("""
             SELECT * FROM ads WHERE user_id=?;
         """, (session['user_id'],))
-    ads = [dict(ad) for ad in cur.fetchall()]
+    ads = cur.fetchall()
 
     db_close(conn, cur)
 
@@ -394,7 +391,7 @@ def users():
         return render_template('users.html', users=users)
     except Exception as e:
         return f"An error occurred: {str(e)}"
-
+    
 
 @app.route('/delete_user/<int:user_id>', methods=['POST'])
 def delete_user(user_id):
@@ -425,7 +422,7 @@ def edit_user(user_id):
         cur.execute("SELECT * FROM users WHERE id=%s;", (user_id,))
     else:
         cur.execute("SELECT * FROM users WHERE id=?;", (user_id,))
-    user = dict(cur.fetchone())
+    user = cur.fetchone()
 
     if request.method == 'POST':
         fullname = request.form['fullname']
@@ -468,7 +465,7 @@ def delete_ad_admin(ad_id):
 
         # Проверяем, администратор ли пользователь
         is_admin = session.get('is_admin', False)
-
+        
         if is_admin:
             # Администратор может удалить любое объявление
             if current_app.config['DB_TYPE'] == 'postgres':
